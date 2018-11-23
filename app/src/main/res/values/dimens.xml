@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="groupie_items_margin_vertical">5sp</dimen>
+    <dimen name="groupie_items_margin_horizontal">15sp</dimen>
+    <dimen name="list_margin_horizontal">15sp</dimen>
+    <dimen name="table_text_padding">5sp</dimen>
+    <dimen name="table_margin_start_end">0sp</dimen>
+    <dimen name="table_bottom_line_thickness">0.5sp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="h1">24sp</dimen>
+    <dimen name="h2">22sp</dimen>
+    <dimen name="h3">20sp</dimen>
+    <dimen name="h4">18sp</dimen>
+    <dimen name="h5">16sp</dimen>
+    <dimen name="h6">15sp</dimen>
+
+</resources>
