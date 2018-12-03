@@ -76,7 +76,7 @@ object Displayer {
             return SpannableString("")
         }
         else {
-            return SpannableString(spannableBuilder.append(TextManager.decorateText(text, instance.decoratorArray)))
+            return SpannableString(spannableBuilder.append(TextManager.decorateText(text, tag, instance.decoratorArray)))
         }
     }
 
@@ -216,7 +216,7 @@ object Displayer {
     private fun getTextFromRowItem(element: org.jsoup.nodes.Node, tag: String): SpannableString{
         var text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
-            return SpannableString(TextManager.decorateText(element.attr(TAG_TEXT), tag))
+            return SpannableString(TextManager.decorateText(element.attr(TAG_TEXT), tag, ArrayList(0)))
         } else for (child in element.childNodes()){
             text.append(getTextFromRowItem(child, element.nodeName()))
         }
@@ -226,7 +226,7 @@ object Displayer {
     private fun getHeaderTextFromRowItem(element: org.jsoup.nodes.Node): SpannableString{
         val text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
-            return TextManager.decorateText(element.attr(TAG_TEXT), TAG_STRONG)
+            return TextManager.decorateText(element.attr(TAG_TEXT), TAG_STRONG, ArrayList(0))
         } else for (child in element.childNodes()){
             text.append(getHeaderTextFromRowItem(child))
         }

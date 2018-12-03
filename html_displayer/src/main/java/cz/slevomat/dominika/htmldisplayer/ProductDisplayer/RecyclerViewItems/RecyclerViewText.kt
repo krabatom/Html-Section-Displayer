@@ -15,7 +15,7 @@ class RecyclerViewText (private val text: SpannableString) : Item() {
     override fun getLayout() = R.layout.text_item
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-//        viewHolder.text_view_item.movementMethod = LinkMovementMethod.getInstance()
+        viewHolder.text_view_item.movementMethod = LinkMovementMethod.getInstance()
         viewHolder.text_view_item.text = text
     }
 }

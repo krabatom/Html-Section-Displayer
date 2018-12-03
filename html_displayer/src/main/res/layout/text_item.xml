@@ -9,7 +9,7 @@
     android:layout_marginTop="@dimen/groupie_items_margin_vertical"
     tools:text="Hmmmmmmmmmmm..."
     android:textSize="@dimen/text_size"
-    android:fontFamily="sans-serif-thin"
+    android:fontFamily="sans-serif-light"
     android:textColor="#000000"
     android:clickable="true"
     android:focusable="true"

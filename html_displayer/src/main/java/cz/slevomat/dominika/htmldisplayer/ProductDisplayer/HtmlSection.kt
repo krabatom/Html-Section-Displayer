@@ -56,7 +56,7 @@ open class HtmlSection(headerItem: Group? = null) : Section(headerItem), Display
             DataType.LIST_UNORDERED -> Section(RecyclerViewList(item.textToDisplay, item.liLevel))
             DataType.YOUTUBE -> Section(RecyclerViewVideo(item.textUrl))
             DataType.TABLE -> Section(RecyclerViewTable(item.table.rows!!))
-            DataType.UNKNOWN -> throw UnknownFormatConversionException("Unknown type HTML type")
+            DataType.UNKNOWN -> throw UnknownFormatConversionException("Unknown HTML type")
         }
     }
 }
