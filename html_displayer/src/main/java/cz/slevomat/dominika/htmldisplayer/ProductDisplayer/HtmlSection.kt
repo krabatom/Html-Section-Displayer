@@ -1,5 +1,7 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
+import android.annotation.SuppressLint
+import android.content.Context
 import cz.slevomat.dominika.htmldisplayer.Models.GroupieItem
 import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.RecyclerViewItems.*
 import com.xwray.groupie.Group
@@ -7,7 +9,17 @@ import com.xwray.groupie.Section
 import java.util.*
 import kotlin.collections.ArrayList
 
-open class HtmlSection(headerItem: Group? = null) : Section(headerItem ), DisplayHtml.SetDataListener {
+open class HtmlSection(headerItem: Group? = null) : Section(headerItem), DisplayHtml.SetDataListener {
+
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        lateinit var context: Context
+
+        fun init(context: Context) {
+            this.context = context
+        }
+    }
+
     private var htmlContent: String? = ""
     /**
      * Async parse and show html content in android views.
@@ -18,16 +30,16 @@ open class HtmlSection(headerItem: Group? = null) : Section(headerItem ), Displa
             return
         }
         this.htmlContent = htmlContent
-        DisplayHtml().createSectionsFromHtml(htmlContent,this)
+        DisplayHtml().createSectionsFromHtml(htmlContent, this)
     }
 
     override fun setDataset(dataset: ArrayList<GroupieItem>) {
         updateSection(dataset)
     }
 
-    private fun updateSection(data: ArrayList<GroupieItem>){
+    private fun updateSection(data: ArrayList<GroupieItem>) {
         val groups = ArrayList<Group>()
-        for (item in data){
+        for (item in data) {
             groups.add(createGroupieItem(item))
         }
         update(groups)
@@ -36,8 +48,8 @@ open class HtmlSection(headerItem: Group? = null) : Section(headerItem ), Displa
     /**
      * Create section of groupie item based on it's type
      */
-    private fun createGroupieItem(item: GroupieItem): Section{
-        return when(item.dataType){
+    private fun createGroupieItem(item: GroupieItem): Section {
+        return when (item.dataType) {
             DataType.TEXT -> Section(RecyclerViewText(item.textToDisplay))
             DataType.IMAGE -> Section(RecyclerViewImage(item.textUrl))
             DataType.LIST_ORDERED -> Section(RecyclerViewList(item.textToDisplay, item.liLevel))

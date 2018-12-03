@@ -21,6 +21,7 @@ class DisplayHtml{
     private val TAG_BOLD: String = "b"
     private val TAG_EMPH: String = "em"
     private val TAG_ITALIC: String = "i"
+    private val TAG_HYPERLINK: String = "a"
     val decoratorArray: ArrayList<String> = arrayListOf()
 
     /**
@@ -77,6 +78,9 @@ class DisplayHtml{
                                 decoratorArray.add(child.nodeName())
                                 spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder))
                                 decoratorArray.removeAt(decoratorArray.size - 1)
+                            }
+                            TAG_HYPERLINK -> {
+                                spannableBuilder.append(Displayer.processHyperlink(child))
                             }
                             else -> {
                                 spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder))

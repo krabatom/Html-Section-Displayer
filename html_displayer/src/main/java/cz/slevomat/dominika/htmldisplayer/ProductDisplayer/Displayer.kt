@@ -9,6 +9,7 @@ import android.util.Log
 import cz.slevomat.dominika.htmldisplayer.Models.GroupieItem
 import cz.slevomat.dominika.htmldisplayer.Models.TableModel
 import org.jsoup.nodes.Node
+import org.w3c.dom.Text
 
 object Displayer {
     private val TAG: String = Displayer::class.java.simpleName
@@ -77,6 +78,18 @@ object Displayer {
         else {
             return SpannableString(spannableBuilder.append(TextManager.decorateText(text, instance.decoratorArray)))
         }
+    }
+
+    fun processHyperlink(child: org.jsoup.nodes.Node): SpannableString {
+        var text = ""
+        var link = ""
+        if (child.attr("href") != null) {
+            link = child.attr("href")
+        }
+        if (child.childNode(0) != null) {
+            text = child.childNode(0).toString()
+        }
+        return TextManager.decorateHyperlink(text, link)
     }
 
     private fun addTextItem(text: SpannableString, instance: DisplayHtml){

@@ -11,5 +11,8 @@
     android:textSize="@dimen/text_size"
     android:fontFamily="sans-serif-thin"
     android:textColor="#000000"
+    android:clickable="true"
+    android:focusable="true"
+    android:autoLink="phone|web"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" />

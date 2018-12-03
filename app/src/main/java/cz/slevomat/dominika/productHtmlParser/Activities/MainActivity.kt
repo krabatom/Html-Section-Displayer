@@ -1,5 +1,6 @@
 package cz.slevomat.dominika.productHtmlParser.Activities
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = gAdapter
         }
-        displayFromId(1303098  , gAdapter)
+        displayFromId(1388510  , gAdapter, this)
     }
 
     /**
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
      * @param productId Id of the product to be displayed
      * @param gAdapter Adapter for displaying groupie sections
      */
-    private fun displayFromId(productId: Long, gAdapter: GroupAdapter<ViewHolder>) {
+    private fun displayFromId(productId: Long, gAdapter: GroupAdapter<ViewHolder>, context: Context) {
         val client = RetrofitClient.create()
         client.getProductDescription(productId)
                 .subscribeOn(Schedulers.io())
@@ -43,9 +44,10 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { result ->
                             val htmlSection = HtmlSection()
-                            htmlSection.loadAsync(result.data?.product?.description
-                                    ?: "")
-//                            htmlSection.loadAsync(HtmlExamples.exHtml3)
+//                            HtmlSection.init(context)
+//                            htmlSection.loadAsync(result.data?.product?.description
+//                                    ?: "")
+                            htmlSection.loadAsync(HtmlExamples.exHtml15)
                             gAdapter.add(htmlSection)
                         },
                         { error -> Log.e(TAG, error.message) }

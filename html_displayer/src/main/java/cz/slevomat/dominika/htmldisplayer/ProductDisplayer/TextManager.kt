@@ -1,10 +1,18 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
 import android.graphics.Typeface
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
+import android.content.Intent
+import android.net.Uri
+import android.text.*
+import androidx.core.content.ContextCompat.startActivity
+import android.text.style.ClickableSpan
+import android.view.View
+import androidx.core.content.ContextCompat.startActivity
+
+
+
 
 object TextManager {
     private val chars = arrayOf(" ", "", "\n", "\t", "\n\t")
@@ -105,5 +113,18 @@ object TextManager {
         spText.setSpan(AbsoluteSizeSpan(fontSizes[i-1], true), 0, text.count(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         spText.setSpan(StyleSpan(Typeface.BOLD), 0, text.count(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         return spText
+    }
+
+    fun decorateHyperlink(text: String, link: String) : SpannableString {
+        val string = SpannableString(text)
+        val clickSpan = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                view.context.startActivity(intent)
+            }
+
+        }
+        string.setSpan(clickSpan, 0, text.count(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return string
     }
 }
