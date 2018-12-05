@@ -80,7 +80,7 @@ object Displayer {
         }
     }
 
-    fun processHyperlink(child: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder): SpannableString {
+    fun processHyperlink(child: org.jsoup.nodes.Node): SpannableString {
         var text = ""
         var link = ""
         if (child.attr("href") != null) {

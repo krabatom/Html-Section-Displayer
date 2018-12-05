@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 //                            HtmlSection.init(context)
                             htmlSection.loadAsync(result.data?.product?.description
                                     ?: "")
-//                            htmlSection.loadAsync(HtmlExamples.exHtml15)
+//                            htmlSection.loadAsync(HtmlExamples.exHtml17)
                             gAdapter.add(htmlSection)
                         },
                         { error -> Log.e(TAG, error.message) }

@@ -72,6 +72,8 @@ object TextManager {
         }
         nText = nText.replace("\n", " ")
         nText = nText.replace("\t", "")
+        nText = nText.replace("\u2028", "")
+        nText = nText.replace("&nbsp;", " ")
 //        if (!nText.isEmpty() || nText == " ") nText += " "
         return nText
     }
@@ -108,7 +110,7 @@ object TextManager {
     }
 
     fun decorateHyperlink(text: String, link: String): SpannableString {
-        val string = SpannableString(text)
+        val string = SpannableString(adjustText(text))
         val clickSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
@@ -116,7 +118,7 @@ object TextManager {
             }
 
         }
-        string.setSpan(clickSpan, 0, text.count(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        string.setSpan(clickSpan, 0, string.count(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         return string
     }
 }
