@@ -53,7 +53,7 @@ object Displayer {
                 processList(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
                 return SpannableStringBuilder("")
             }
-            TAG_PAR,"h1","h2","h3","h4","h5","h6" -> {
+            TAG_PAR,"h1","h2","h3","h4","h5","h6"-> {
                 addTextItem(SpannableString(spannableBuilder), instance)
                 return SpannableStringBuilder("")
             }
@@ -80,7 +80,7 @@ object Displayer {
         }
     }
 
-    fun processHyperlink(child: org.jsoup.nodes.Node): SpannableString {
+    fun processHyperlink(child: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder): SpannableString {
         var text = ""
         var link = ""
         if (child.attr("href") != null) {

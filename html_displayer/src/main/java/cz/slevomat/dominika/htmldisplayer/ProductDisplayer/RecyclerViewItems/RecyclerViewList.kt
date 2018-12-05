@@ -1,6 +1,7 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer.RecyclerViewItems
 
 import android.text.SpannableString
+import android.text.method.LinkMovementMethod
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import cz.slevomat.dominika.htmldisplayer.R
@@ -16,6 +17,7 @@ class RecyclerViewList (private val text: SpannableString, private val ulLevel: 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         val view = viewHolder.text_view_list
         view.setPadding(ulLevel * 50, 0,0,0)
+        viewHolder.text_view_list.movementMethod = LinkMovementMethod.getInstance()
         viewHolder.text_view_list.text = text
     }
 }

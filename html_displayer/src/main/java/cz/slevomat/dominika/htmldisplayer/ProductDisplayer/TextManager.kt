@@ -23,12 +23,12 @@ object TextManager {
     fun decorateText(text: String, element_tag: String, tags: ArrayList<String>): SpannableString {
         val adjText = adjustText(text)
         if (!chars.contains(adjText)) {
-            if (tags.size > 0) {
-                val spannableString = SpannableString(adjText)
+            if (tags.size > 1) {
+                var spannableString = SpannableString(adjText)
                 for (tag in tags) {
                     when (tag) {
-                        TAG_STRONG, TAG_BOLD -> return decorateBold(spannableString)
-                        TAG_EMPH, TAG_ITALIC -> return decorateItalic(spannableString)
+                        TAG_STRONG, TAG_BOLD -> spannableString = decorateBold(spannableString)
+                        TAG_EMPH, TAG_ITALIC -> spannableString = decorateItalic(spannableString)
                         "h1" -> return decorateHi(1, adjText)
                         "h2" -> return decorateHi(2, adjText)
                         "h3" -> return decorateHi(3, adjText)
@@ -38,6 +38,7 @@ object TextManager {
                         else -> return spannableString
                     }
                 }
+                return spannableString
             } else {
                 when (element_tag) {
                     TAG_STRONG, TAG_BOLD -> return decorateBold(adjText)

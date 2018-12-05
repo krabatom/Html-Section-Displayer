@@ -80,7 +80,7 @@ class DisplayHtml{
                                 decoratorArray.removeAt(decoratorArray.size - 1)
                             }
                             TAG_HYPERLINK -> {
-                                spannableBuilder.append(Displayer.processHyperlink(child))
+                                spannableBuilder.append(Displayer.processHyperlink(child, spannableBuilder))
                             }
                             else -> {
                                 spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder))
