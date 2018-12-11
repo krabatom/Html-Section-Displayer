@@ -1,6 +1,7 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
 import android.graphics.Color
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -59,7 +60,8 @@ object Displayer {
             }
             TAG_UL -> {
                 if (listType == DataType.LIST_ORDERED || listType == DataType.LIST_UNORDERED){
-                    processList(SpannableString(TextManager.adjustText(spannableBuilder.toString())), ulLevel, olLevel, listType, instance)
+                    processList(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
+//                    processList(SpannableString(TextManager.adjustText(spannableBuilder.toString())), ulLevel, olLevel, listType, instance)
                     return SpannableStringBuilder("")
                 }
                 else return spannableBuilder
