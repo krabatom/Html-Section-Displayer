@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = gAdapter
         }
-        displayFromId(1356090  , gAdapter, this)
+        displayFromId(1416201  , gAdapter, this)
     }
 
     /**
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 //                            HtmlSection.init(context)
                             htmlSection.loadAsync(result.data?.product?.description
                                     ?: "")
-//                            htmlSection.loadAsync(HtmlExamples.exHtml17)
+//                            htmlSection.loadAsync(HtmlExamples.exHtml)
                             gAdapter.add(htmlSection)
                         },
                         { error -> Log.e(TAG, error.message) }

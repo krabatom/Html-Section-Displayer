@@ -52,7 +52,6 @@ object TextManager {
                     else -> return SpannableString(adjText)
                 }
             }
-            return SpannableString(adjText)
         } else return SpannableString("")
     }
 
@@ -116,7 +115,6 @@ object TextManager {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
                 view.context.startActivity(intent)
             }
-
         }
         string.setSpan(clickSpan, 0, string.count(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         return string

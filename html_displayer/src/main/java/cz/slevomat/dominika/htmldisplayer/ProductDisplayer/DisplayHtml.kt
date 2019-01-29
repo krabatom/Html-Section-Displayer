@@ -7,6 +7,7 @@ import cz.slevomat.dominika.htmldisplayer.Models.GroupieItem
 import org.jsoup.Jsoup
 import kotlin.collections.ArrayList
 import kotlinx.coroutines.*
+import org.jsoup.nodes.Document
 
 class DisplayHtml{
     private val TAG: String = DisplayHtml::class.java.simpleName
@@ -28,7 +29,12 @@ class DisplayHtml{
      * Parse html using Jsoup
      */
     private fun parseHtml(sHtml: String?): org.jsoup.nodes.Document {
-        return Jsoup.parse(sHtml)
+        val parsedString = Jsoup.parse(sHtml)
+        if (parsedString.text() == sHtml){
+            //sHtml is only text without html tags
+            return Jsoup.parse("<p>" + sHtml + "</p>")
+        }
+        else return parsedString
     }
 
     fun createSectionsFromHtml(sHtml: String?, listener: SetDataListener)
@@ -37,7 +43,8 @@ class DisplayHtml{
         try {
             val job = async(Dispatchers.Default) {
                 htmlRecursion(
-                        parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN, this@DisplayHtml, SpannableStringBuilder(""))
+                        parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN,
+                        this@DisplayHtml, SpannableStringBuilder(""))
             }
             job.await()
             listener.setDataset(groupieItems)
