@@ -6,3 +6,5 @@ object RetrofitStrings {
     const val QUERY_ID = "productId"
     const val URL_BASE = "urlurl"
 }
+
+

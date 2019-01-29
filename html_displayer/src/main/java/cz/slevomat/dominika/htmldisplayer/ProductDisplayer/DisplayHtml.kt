@@ -67,6 +67,10 @@ class DisplayHtml{
                     if (child.childNodeSize() != 0) {
                         when(child.nodeName()){
                             TAG_LIST_UNORDER -> {
+                                if (!spannableBuilder.toString().isBlank() && dataType != DataType.LIST_ORDERED && dataType != DataType.LIST_UNORDERED){
+                                    Displayer.addTextItem(SpannableString(spannableBuilder), instance)
+                                    spannableBuilder = SpannableStringBuilder("")
+                                }
                                 if (dataType == DataType.LIST_UNORDERED || dataType == DataType.LIST_ORDERED){
                                     if (liLevel >= 1){
                                         spannableBuilder = Displayer.processElementAndAdd(child, spannableBuilder, liLevel - 1, olCounter, dataType, instance)
@@ -76,7 +80,13 @@ class DisplayHtml{
                                 }
                                 spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_UNORDERED, instance, spannableBuilder))
                             }
-                            TAG_LIST_ORDER -> spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_ORDERED, instance, spannableBuilder))
+                            TAG_LIST_ORDER -> {
+                                if (!spannableBuilder.toString().isBlank() && dataType != DataType.LIST_ORDERED && dataType != DataType.LIST_UNORDERED){
+                                    Displayer.addTextItem(SpannableString(spannableBuilder), instance)
+                                    spannableBuilder = SpannableStringBuilder("")
+                                }
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_ORDERED, instance, spannableBuilder))
+                            }
 
                             TAG_LIST -> spannableBuilder.append(htmlRecursion(child.childNodes(),dataType, instance, spannableBuilder))
                             TAG_TABLE -> spannableBuilder.append(Displayer.processTable(spannableBuilder, child.childNodes(), instance))

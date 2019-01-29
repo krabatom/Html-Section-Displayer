@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity() {
                         { result ->
                             val htmlSection = HtmlSection()
 //                            HtmlSection.init(context)
-                            htmlSection.loadAsync(result.data?.product?.description
-                                    ?: "")
-//                            htmlSection.loadAsync(HtmlExamples.exHtml)
+//                            htmlSection.loadAsync(result.data?.product?.description
+//                                    ?: "")
+                            htmlSection.loadAsync(HtmlExamples.exHtml)
                             gAdapter.add(htmlSection)
                         },
                         { error -> Log.e(TAG, error.message) }

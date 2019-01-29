@@ -94,7 +94,7 @@ object Displayer {
         return TextManager.decorateHyperlink(text, link)
     }
 
-    private fun addTextItem(text: SpannableString, instance: DisplayHtml){
+    fun addTextItem(text: SpannableString, instance: DisplayHtml){
         if (text.toString().isNotBlank()) instance.groupieItems.add(GroupieItem(
                 DataType.TEXT,
                 text,
