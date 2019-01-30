@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = gAdapter
         }
-        displayFromId(1416201  , gAdapter, this)
+        displayFromId(1328774, gAdapter, this)
     }
 
     /**

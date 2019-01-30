@@ -25,12 +25,19 @@ class DisplayHtml{
     private val TAG_HYPERLINK: String = "a"
     val decoratorArray: ArrayList<String> = arrayListOf()
 
+    private fun isHTML(sHtml: String?): Boolean{
+        val regex = """<[a-z][\s\S]*>""".toRegex()
+        return regex.containsMatchIn(sHtml!!)
+    }
+
     /**
      * Parse html using Jsoup
      */
     private fun parseHtml(sHtml: String?): org.jsoup.nodes.Document {
         val parsedString = Jsoup.parse(sHtml)
-        if (parsedString.text() == sHtml){
+        val nHtml = sHtml?.replace("\n", " ")
+//        if (parsedString.text() == nHtml){
+        if (!isHTML(sHtml)){
             //sHtml is only text without html tags
             return Jsoup.parse("<p>" + sHtml + "</p>")
         }

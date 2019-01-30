@@ -7,4 +7,3 @@ object RetrofitStrings {
     const val URL_BASE = "urlurl"
 }
 
-
