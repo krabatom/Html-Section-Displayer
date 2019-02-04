@@ -11,7 +11,7 @@ import cz.slevomat.dominika.htmldisplayer.R
 import kotlinx.android.synthetic.main.video_item.*
 
 /**
- * Groupie item for video item
+ * Groupie item for a video item
  */
 class RecyclerViewVideo (private val videoId: String): Item() {
     private val TAG: String = RecyclerViewVideo::class.java.simpleName
@@ -27,7 +27,6 @@ class RecyclerViewVideo (private val videoId: String): Item() {
     }
 
     private fun launchYoutubeId(context: Context, youtubeId: String) {
-        Log.i(TAG, "called click listener on video view")
         val url = URL_VIDEO_PREFIX + youtubeId
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         intent.putExtra("force_fullscreen", true)

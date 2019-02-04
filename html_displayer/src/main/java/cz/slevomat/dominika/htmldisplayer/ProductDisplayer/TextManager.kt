@@ -9,20 +9,20 @@ import android.text.*
 import android.text.style.ClickableSpan
 import android.view.View
 
-
 object TextManager {
     private val chars = arrayOf(" ", "", "\n", "\t", "\n\t")
-    private val TAG_STRONG: String = "strong"
-    private val TAG_BOLD: String = "b"
-    private val TAG_EMPH: String = "em"
-    private val TAG_ITALIC: String = "i"
+    private const val TAG_STRONG: String = "strong"
+    private const val TAG_BOLD: String = "b"
+    private const val TAG_EMPH: String = "em"
+    private const val TAG_ITALIC: String = "i"
 
     /**
-     * Decorate text based on it's element tag
+     * Decorate text based on it's node tags
      */
-    fun decorateText(text: String, element_tag: String, tags: ArrayList<String>): SpannableString {
+    fun decorateText(text: String, node_tag: String, tags: ArrayList<String>): SpannableString {
         val adjText = adjustText(text)
         if (!chars.contains(adjText)) {
+            // if text has more tags (eg. i and strong), process it separately
             if (tags.size > 1) {
                 var spannableString = SpannableString(adjText)
                 for (tag in tags) {
@@ -40,7 +40,7 @@ object TextManager {
                 }
                 return spannableString
             } else {
-                when (element_tag) {
+                when (node_tag) {
                     TAG_STRONG, TAG_BOLD -> return decorateBold(adjText)
                     TAG_EMPH, TAG_ITALIC -> return decorateItalic(adjText)
                     "h1" -> return decorateHi(1, adjText)
@@ -57,7 +57,7 @@ object TextManager {
 
 
     /**
-     * Delete "\n" and "\t" at the beginning, end and inside the text
+     * Delete useless chars (eg. "\n" and "\t") in the text
      */
     fun adjustText(text: String): String {
         var nText = text

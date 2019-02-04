@@ -1,16 +1,14 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
 import android.graphics.Color
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
 import android.util.Log
-import cz.slevomat.dominika.htmldisplayer.Models.GroupieItem
+import cz.slevomat.dominika.htmldisplayer.Models.BaseItem
 import cz.slevomat.dominika.htmldisplayer.Models.TableModel
 import org.jsoup.nodes.Node
-import org.w3c.dom.Text
 
 object Displayer {
     private val TAG: String = Displayer::class.java.simpleName
@@ -44,7 +42,7 @@ object Displayer {
         }
 
     /**
-     * Based on the element's tag add item to groupieItems
+     * Based on the element's tag add item to dataItems
      */
     fun processElementAndAdd(element: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder,
                              ulLevel: Int, olLevel: Int, listType: DataType,
@@ -95,7 +93,7 @@ object Displayer {
     }
 
     fun addTextItem(text: SpannableString, instance: DisplayHtml){
-        if (text.toString().isNotBlank()) instance.groupieItems.add(GroupieItem(
+        if (text.toString().isNotBlank()) instance.dataItems.add(BaseItem(
                 DataType.TEXT,
                 text,
                 "",
@@ -119,7 +117,7 @@ object Displayer {
     }
 
     private fun addImageItem(url: String, instance: DisplayHtml){
-        instance.groupieItems.add(GroupieItem(
+        instance.dataItems.add(BaseItem(
                 DataType.IMAGE,
                 SpannableString(""),
                 url,
@@ -145,7 +143,7 @@ object Displayer {
     }
 
     private fun addVideoItem(videoId: String, instance: DisplayHtml) {
-        instance.groupieItems.add(GroupieItem(
+        instance.dataItems.add(BaseItem(
                 DataType.YOUTUBE,
                 SpannableString(""),
                 videoId,
@@ -156,7 +154,7 @@ object Displayer {
 
 
     private fun addListItem(text: SpannableString, ulLevel: Int, instance: DisplayHtml){
-            if (text.toString().isNotBlank()) instance.groupieItems.add(GroupieItem(
+            if (text.toString().isNotBlank()) instance.dataItems.add(BaseItem(
                     DataType.LIST_ORDERED,
                     text,
                     "",
@@ -236,7 +234,7 @@ object Displayer {
     }
 
     private fun addTableItem(table: TableModel, instance: DisplayHtml){
-        instance.groupieItems.add(GroupieItem(
+        instance.dataItems.add(BaseItem(
                 DataType.TABLE,
                 SpannableString(""),
                 "",

@@ -15,15 +15,16 @@ import cz.slevomat.dominika.htmldisplayer.R
 import kotlinx.android.synthetic.main.table_item.*
 
 /**
- * Groupie item for table item
+ * Groupie item for a table item
  */
 class RecyclerViewTable (private val table: MutableList<MutableList<SpannableString>>): Item(){
+    //table is displayed inside horizontal scroll view layout
     override fun getLayout() = R.layout.table_item
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         val context = viewHolder.horizontal_scroll_table.context
         //if scroll view is not empty then clear it's content
-        if (viewHolder.horizontal_scroll_table.childCount !=0)
+        if (viewHolder.horizontal_scroll_table.childCount != 0)
             clearContent(viewHolder.horizontal_scroll_table)
 
         //create table layout inside horizontal scroll view and fill it with rows
@@ -40,7 +41,7 @@ class RecyclerViewTable (private val table: MutableList<MutableList<SpannableStr
                 background = ColorDrawable(Color.GRAY)
             }
 
-            //rows fill with string data
+            //row of the table fill with its specified data
             for (cell in row) {
                 val textView = TextView(context)
                 textView.apply {

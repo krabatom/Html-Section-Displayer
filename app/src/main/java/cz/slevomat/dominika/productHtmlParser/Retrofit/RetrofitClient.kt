@@ -6,6 +6,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
+/*
+* Client for getting html descriptions of a deal
+* Only for testing
+*/
 interface RetrofitClient {
     @GET(RetrofitStrings.GET)
     @Headers(RetrofitStrings.TOKEN)

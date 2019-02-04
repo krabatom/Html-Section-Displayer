@@ -8,7 +8,7 @@ import cz.slevomat.dominika.htmldisplayer.R
 import kotlinx.android.synthetic.main.text_item.*
 
 /**
- * Groupie item for text item
+ * Groupie item for a text item
  */
 class RecyclerViewText (private val text: SpannableString) : Item() {
 

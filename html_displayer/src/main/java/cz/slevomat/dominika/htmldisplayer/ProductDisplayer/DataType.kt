@@ -1,5 +1,8 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
+/**
+ * Data type of a groupie item specifier
+ **/
 enum class DataType {
     UNKNOWN,
     TEXT,
