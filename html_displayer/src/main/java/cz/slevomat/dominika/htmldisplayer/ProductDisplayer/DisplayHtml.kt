@@ -49,8 +49,7 @@ class DisplayHtml{
         try {
             val job = async(Dispatchers.Default) {
                 htmlRecursion(
-                        parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN,
-                        this@DisplayHtml, SpannableStringBuilder(""))
+                        parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN,this@DisplayHtml)
             }
             job.await()
             listener.setDataset(dataItems)
@@ -63,59 +62,74 @@ class DisplayHtml{
     /**
      * Recursively go through parsed html and with processed nodes fill dataItems array based on node's tag
      */
-    private fun htmlRecursion(children: MutableList<org.jsoup.nodes.Node>, dataType: DataType, instance : DisplayHtml, spannableString: SpannableStringBuilder): SpannableString {
+    private fun htmlRecursion(children: MutableList<org.jsoup.nodes.Node>, dataType: DataType, instance : DisplayHtml): SpannableString {
             if (children.size > 0) {
                 var spannableBuilder = SpannableStringBuilder("")
-                var olCounter = 0
+                var olCounter = 0  //specifies numerical mark before ordered list item
                 for (child in children) {
+                    // if this child node starts new <ul> or <ol>, increment liLevel
                     if (child.nodeName() == TAG_LIST_UNORDER || child.nodeName() == TAG_LIST_ORDER) liLevel += 1
                     if (child.nodeName() == TAG_BREAK) spannableBuilder.append("\n")
+
                     if (child.childNodeSize() != 0) {
                         when(child.nodeName()){
                             TAG_LIST_UNORDER -> {
                                 if (!spannableBuilder.toString().isBlank() && dataType != DataType.LIST_ORDERED && dataType != DataType.LIST_UNORDERED){
+                                    //there is text in spannableBuilder before <ul> so add it to dataItems
+                                    //and clear spannableBuilder
                                     Displayer.addTextItem(SpannableString(spannableBuilder), instance)
                                     spannableBuilder = SpannableStringBuilder("")
                                 }
+
                                 if (dataType == DataType.LIST_UNORDERED || dataType == DataType.LIST_ORDERED){
                                     if (liLevel >= 1){
-                                        spannableBuilder = Displayer.processElementAndAdd(child, spannableBuilder, liLevel - 1, olCounter, dataType, instance)
+                                        spannableBuilder = Displayer.processNodeAndAdd(child, spannableBuilder, liLevel - 1, olCounter, dataType, instance)
                                     }
-                                    else spannableBuilder = Displayer.processElementAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
+                                    else spannableBuilder = Displayer.processNodeAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
 
                                 }
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_UNORDERED, instance, spannableBuilder))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_UNORDERED, instance))
                             }
                             TAG_LIST_ORDER -> {
                                 if (!spannableBuilder.toString().isBlank() && dataType != DataType.LIST_ORDERED && dataType != DataType.LIST_UNORDERED){
+                                    //there is text in spannableBuilder before <ul> so add it to dataItems
+                                    //and clear spannableBuilder
                                     Displayer.addTextItem(SpannableString(spannableBuilder), instance)
                                     spannableBuilder = SpannableStringBuilder("")
                                 }
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_ORDERED, instance, spannableBuilder))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_ORDERED, instance))
                             }
 
-                            TAG_LIST -> spannableBuilder.append(htmlRecursion(child.childNodes(),dataType, instance, spannableBuilder))
-                            TAG_TABLE -> spannableBuilder.append(Displayer.processTable(spannableBuilder, child.childNodes(), instance))
+                            TAG_LIST -> spannableBuilder.append(htmlRecursion(child.childNodes(),dataType, instance))
+                            TAG_TABLE -> spannableBuilder.append(Displayer.processTableItem(spannableBuilder, child.childNodes(), instance))
                             TAG_ITALIC, TAG_EMPH, TAG_STRONG, TAG_BOLD -> {
-                                //because of displaying text which is bold and italic at the same time
+                                //text might have more tags (eg. strong and i) so to decorate text
+                                //with all its tags later add tags to array
                                 decoratorArray.add(child.nodeName())
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance))
                                 decoratorArray.removeAt(decoratorArray.size - 1)
                             }
                             TAG_HYPERLINK -> {
                                 spannableBuilder.append(Displayer.processHyperlink(child))
                             }
                             else -> {
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance))
                             }
                         }
                         when(child.nodeName()){
-                            TAG_LIST_ORDER, TAG_LIST_UNORDER -> liLevel -= 1
+                            TAG_LIST_ORDER, TAG_LIST_UNORDER -> {
+                                //when whole <ul> or <ol> section in html is processed, decrement liLevel
+                                liLevel -= 1
+                            }
                             TAG_LIST -> {
-                                if (dataType == DataType.LIST_ORDERED) olCounter += 1
+                                if (dataType == DataType.LIST_ORDERED) {
+                                    //increment numerical mark for next ordered list item
+                                    olCounter += 1
+                                }
                             }
                         }
-                        spannableBuilder = Displayer.processElementAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
+                        spannableBuilder = Displayer.processNodeAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
+
                     } else {
                         spannableBuilder = SpannableStringBuilder(
                                 Displayer.manageAttributes(child.attributes(), child.parentNode().nodeName(),spannableBuilder,instance))
@@ -125,6 +139,7 @@ class DisplayHtml{
             }
             else return SpannableString("")
         }
+
 
     interface SetDataListener {
         fun setDataset(dataset: ArrayList<BaseItem>)

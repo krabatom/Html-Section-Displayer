@@ -33,8 +33,8 @@ object Displayer {
                          instance: DisplayHtml): SpannableString {
             for (attribute in attributes) {
                 when (attribute.key) {
-                    TAG_TEXT -> return processText(spannableBuilder, attribute.value, tag, instance)
-                    TAG_IMAGE -> return processImage(attribute.value, spannableBuilder, instance)
+                    TAG_TEXT -> return processTextItem(spannableBuilder, attribute.value, tag, instance)
+                    TAG_IMAGE -> return processImageItem(attribute.value, spannableBuilder, instance)
                     else -> return SpannableString(spannableBuilder)
                 }
             }
@@ -42,14 +42,14 @@ object Displayer {
         }
 
     /**
-     * Based on the element's tag add item to dataItems
+     * Based on the node's tag add item to dataItems
      */
-    fun processElementAndAdd(element: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder,
-                             ulLevel: Int, olLevel: Int, listType: DataType,
-                             instance: DisplayHtml): SpannableStringBuilder{
-        when (element.nodeName()){
+    fun processNodeAndAdd(node: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder,
+                          ulLevel: Int, olLevel: Int, listType: DataType,
+                          instance: DisplayHtml): SpannableStringBuilder{
+        when (node.nodeName()){
             TAG_LIST -> {
-                processList(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
+                processListItem(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
                 return SpannableStringBuilder("")
             }
             TAG_PAR,"h1","h2","h3","h4","h5","h6"-> {
@@ -58,8 +58,8 @@ object Displayer {
             }
             TAG_UL -> {
                 if (listType == DataType.LIST_ORDERED || listType == DataType.LIST_UNORDERED){
-                    processList(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
-//                    processList(SpannableString(TextManager.adjustText(spannableBuilder.toString())), ulLevel, olLevel, listType, instance)
+                    processListItem(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
+//                    processListItem(SpannableString(TextManager.adjustText(spannableBuilder.toString())), ulLevel, olLevel, listType, instance)
                     return SpannableStringBuilder("")
                 }
                 else return spannableBuilder
@@ -68,8 +68,8 @@ object Displayer {
         }
     }
 
-    private fun processText(spannableBuilder: SpannableStringBuilder, text: String,
-                            tag: String, instance: DisplayHtml): SpannableString{
+    private fun processTextItem(spannableBuilder: SpannableStringBuilder, text: String,
+                                tag: String, instance: DisplayHtml): SpannableString{
         //check if youtube id is contained in the text
         if (text.contains(PREFIX_YOUTUBE_ID)){
             addTextItemWithVideo(SpannableString(TextManager.adjustText(text)),spannableBuilder, instance)
@@ -102,8 +102,8 @@ object Displayer {
         ))
     }
 
-    private fun processImage(url: String, spannableBuilder: SpannableStringBuilder,
-                             instance: DisplayHtml): SpannableString{
+    private fun processImageItem(url: String, spannableBuilder: SpannableStringBuilder,
+                                 instance: DisplayHtml): SpannableString{
         // if spannable builder is not blank then add firstly the text in the builder and then add the image
         if (spannableBuilder.toString().isNotBlank()) addTextItemWithImage(spannableBuilder, url,instance)
             else addImageItem(url,instance)
@@ -180,20 +180,20 @@ object Displayer {
         }
     }
 
-    private fun processList(bulletBuilder: SpannableString, ulLevel: Int, olLevel: Int,
-                            listType: DataType, instance: DisplayHtml){
+    private fun processListItem(bulletBuilder: SpannableString, ulLevel: Int, olLevel: Int,
+                                listType: DataType, instance: DisplayHtml){
         when(listType){
             DataType.LIST_ORDERED -> addOrderedListItem(bulletBuilder, ulLevel, olLevel, instance)
             DataType.LIST_UNORDERED -> addUnorderedListItem(bulletBuilder, ulLevel, instance)
-            else -> Log.i(TAG, "Error in type in processList()")
+            else -> Log.i(TAG, "Error in type in processListItem()")
         }
     }
 
     /**
      * From list of children create table and add it to groupieItem
      */
-    fun processTable(spannableBuilder: SpannableStringBuilder, children: MutableList<org.jsoup.nodes.Node>,
-                     instance: DisplayHtml): SpannableString{
+    fun processTableItem(spannableBuilder: SpannableStringBuilder, children: MutableList<org.jsoup.nodes.Node>,
+                         instance: DisplayHtml): SpannableString{
         if (spannableBuilder.toString().isBlank()) {
             createTableAndAdd(children, instance)
         }
@@ -201,13 +201,13 @@ object Displayer {
         return SpannableString("")
     }
 
-    private fun processRow(rowElement: MutableList<org.jsoup.nodes.Node>): MutableList<SpannableString>{
+    private fun processRowItem(rowElement: MutableList<org.jsoup.nodes.Node>): MutableList<SpannableString>{
         val rowItems: MutableList<SpannableString> = arrayListOf()
         for (element in rowElement){
             when(element.nodeName()){
                 TAG_TABLE_DATA -> rowItems.add(getTextFromRowItem(element, ""))
                 TAG_TABLE_HEADER -> rowItems.add(getHeaderTextFromRowItem(element))
-                else -> Log.i(TAG, "Error in type in processRow()")
+                else -> Log.i(TAG, "Error in type in processRowItem()")
             }
         }
         return rowItems
@@ -258,9 +258,9 @@ object Displayer {
                     when (childish.nodeName()) {
                         TAG_ROW -> {
                             numRows++
-                            rows.add(processRow(childish.childNodes()))
+                            rows.add(processRowItem(childish.childNodes()))
                         }
-                        else -> Log.i(TAG, "Error in type in processList()")
+                        else -> Log.i(TAG, "Error in type in processListItem()")
                     }
                 }
             }
