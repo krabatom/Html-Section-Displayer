@@ -38,6 +38,7 @@ class DisplayHtml{
         //check if it is html
         if (!isHTML(sHtml)){
             //sHtml is only text without html tags
+            //add Html tags so it can be processed as a html string
             return Jsoup.parse("<p>" + sHtml + "</p>")
         }
         else return parsedString
@@ -128,9 +129,11 @@ class DisplayHtml{
                                 }
                             }
                         }
+                        //html tag section is completely processed so add it as a groupie item
                         spannableBuilder = Displayer.processNodeAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
 
                     } else {
+                        //
                         spannableBuilder = SpannableStringBuilder(
                                 Displayer.manageAttributes(child.attributes(), child.parentNode().nodeName(),spannableBuilder,instance))
                     }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = gAdapter
         }
-        displayFromId(1328774, gAdapter)
+        displayFromId(1411834 , gAdapter)
     }
 
     /**
@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { result ->
                             val htmlSection = HtmlSection()
-//                            htmlSection.loadAsync(result.data?.product?.description
-//                                    ?: "")
-                            htmlSection.loadAsync(HtmlExamples.exHtml)
+                            htmlSection.loadAsync(result.data?.product?.description
+                                    ?: "")
+//                            htmlSection.loadAsync(HtmlExamples.exHtml)
                             gAdapter.add(htmlSection)
                         },
                         { error -> Log.e(TAG, error.message) }

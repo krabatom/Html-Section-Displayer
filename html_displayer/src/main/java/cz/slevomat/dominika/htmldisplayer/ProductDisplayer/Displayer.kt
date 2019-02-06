@@ -10,6 +10,10 @@ import cz.slevomat.dominika.htmldisplayer.Models.BaseItem
 import cz.slevomat.dominika.htmldisplayer.Models.TableModel
 import org.jsoup.nodes.Node
 
+/**
+ * Object Displayer decides how the data in spannable builder should be added as groupie items
+ * to dataItems array and in which order based on attributes and tags of html nodes
+**/
 object Displayer {
     private val TAG: String = Displayer::class.java.simpleName
 
@@ -25,8 +29,7 @@ object Displayer {
     private const val TAG_TABLE_DATA: String  = "td"
 
     /**
-     * Based on the attribute's name of the node object from html decide whether start processing
-     * text or image, or return inputted spannable string
+     * Based on the attribute's name of the node object decide whether process text or image
      */
     fun manageAttributes(attributes: org.jsoup.nodes.Attributes, tag: String,
                          spannableBuilder: SpannableStringBuilder,
@@ -42,7 +45,7 @@ object Displayer {
         }
 
     /**
-     * Based on the node's tag add item to dataItems
+     * Based on the node's tag create new groupie item and add it to dataItems
      */
     fun processNodeAndAdd(node: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder,
                           ulLevel: Int, olLevel: Int, listType: DataType,
@@ -59,7 +62,6 @@ object Displayer {
             TAG_UL -> {
                 if (listType == DataType.LIST_ORDERED || listType == DataType.LIST_UNORDERED){
                     processListItem(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
-//                    processListItem(SpannableString(TextManager.adjustText(spannableBuilder.toString())), ulLevel, olLevel, listType, instance)
                     return SpannableStringBuilder("")
                 }
                 else return spannableBuilder
@@ -70,7 +72,7 @@ object Displayer {
 
     private fun processTextItem(spannableBuilder: SpannableStringBuilder, text: String,
                                 tag: String, instance: DisplayHtml): SpannableString{
-        //check if youtube id is contained in the text
+        //if text contains id of a youtube video, add video groupie item
         if (text.contains(PREFIX_YOUTUBE_ID)){
             addTextItemWithVideo(SpannableString(TextManager.adjustText(text)),spannableBuilder, instance)
             return SpannableString("")
@@ -104,7 +106,7 @@ object Displayer {
 
     private fun processImageItem(url: String, spannableBuilder: SpannableStringBuilder,
                                  instance: DisplayHtml): SpannableString{
-        // if spannable builder is not blank then add firstly the text in the builder and then add the image
+        // if spannable builder is not empty, add firstly the text in the builder and then add the image
         if (spannableBuilder.toString().isNotBlank()) addTextItemWithImage(spannableBuilder, url,instance)
             else addImageItem(url,instance)
         return SpannableString("")
@@ -185,13 +187,9 @@ object Displayer {
         when(listType){
             DataType.LIST_ORDERED -> addOrderedListItem(bulletBuilder, ulLevel, olLevel, instance)
             DataType.LIST_UNORDERED -> addUnorderedListItem(bulletBuilder, ulLevel, instance)
-            else -> Log.i(TAG, "Error in type in processListItem()")
         }
     }
 
-    /**
-     * From list of children create table and add it to groupieItem
-     */
     fun processTableItem(spannableBuilder: SpannableStringBuilder, children: MutableList<org.jsoup.nodes.Node>,
                          instance: DisplayHtml): SpannableString{
         if (spannableBuilder.toString().isBlank()) {
@@ -207,14 +205,13 @@ object Displayer {
             when(element.nodeName()){
                 TAG_TABLE_DATA -> rowItems.add(getTextFromRowItem(element, ""))
                 TAG_TABLE_HEADER -> rowItems.add(getHeaderTextFromRowItem(element))
-                else -> Log.i(TAG, "Error in type in processRowItem()")
             }
         }
         return rowItems
     }
 
     private fun getTextFromRowItem(element: org.jsoup.nodes.Node, tag: String): SpannableString{
-        var text = SpannableStringBuilder("")
+        val text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
             return SpannableString(TextManager.decorateText(element.attr(TAG_TEXT), tag, ArrayList(0)))
         } else for (child in element.childNodes()){
@@ -260,7 +257,6 @@ object Displayer {
                             numRows++
                             rows.add(processRowItem(childish.childNodes()))
                         }
-                        else -> Log.i(TAG, "Error in type in processListItem()")
                     }
                 }
             }

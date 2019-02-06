@@ -38,7 +38,7 @@ class RecyclerViewTable (private val table: MutableList<MutableList<SpannableStr
             tr.apply {
                 layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT)
-                background = ColorDrawable(Color.GRAY)
+                setBackgroundColor(Color.GRAY)
             }
 
             //row of the table fill with its specified data
@@ -51,10 +51,10 @@ class RecyclerViewTable (private val table: MutableList<MutableList<SpannableStr
                     gravity = Gravity.END
                     val padding =  context.resources.getDimensionPixelSize(R.dimen.table_text_padding)
                     setPadding(padding, padding, padding, padding)
-                    background = ColorDrawable(Color.WHITE)
                     (textView.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
                             context.resources.getDimensionPixelSize(R.dimen.table_bottom_line_thickness)
-
+                    setTextColor(Color.BLACK)
+                    setBackgroundColor(Color.WHITE)
                 }
                 tr.addView(textView)
             }

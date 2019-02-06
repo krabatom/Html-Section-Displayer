@@ -100,7 +100,6 @@ object TextManager {
     }
 
     private fun decorateHi(i: Int, text: String): SpannableString {
-        //docasne TODO prerobit
         val fontSizes = arrayOf(24, 22, 20, 18, 16, 15)
         val spText = SpannableString(text)
         spText.setSpan(AbsoluteSizeSpan(fontSizes[i - 1], true), 0, text.count(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
