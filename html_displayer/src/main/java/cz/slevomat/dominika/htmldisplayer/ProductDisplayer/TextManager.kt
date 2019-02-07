@@ -19,8 +19,8 @@ object TextManager {
     /**
      * Decorate text based on it's node tags
      */
-    fun decorateText(text: String, node_tag: String, tags: ArrayList<String>): SpannableString {
-        val adjText = adjustText(text)
+    fun decorateText(text: String, textSoFar: String, node_tag: String, tags: ArrayList<String>): SpannableString {
+        val adjText = adjustText(text, textSoFar)
         if (!chars.contains(adjText)) {
             // if text has more tags (eg. i and strong), process it separately
             if (tags.size > 1) {
@@ -55,11 +55,18 @@ object TextManager {
         } else return SpannableString("")
     }
 
+    private fun startsWithLetter(string : String) : Boolean{
+        return string.matches(Regex("[[[:alpha:]]0-9].*"))
+    }
+
+    private fun endsWithLetter(string : String) : Boolean{
+        return string.matches(Regex(".*[[[:alpha:]]0-9%]"))
+    }
 
     /**
      * Delete useless chars (eg. "\n" and "\t") in the text
      */
-    fun adjustText(text: String): String {
+    fun adjustText(text: String, textSoFar: String): String {
         var nText = text
         while (nText.startsWith("\n") || nText.startsWith("\t")) {
             if (nText.startsWith("\n")) nText = nText.replaceFirst("\n", "")
@@ -73,7 +80,11 @@ object TextManager {
         nText = nText.replace("\t", "")
         nText = nText.replace("\u2028", "")
         nText = nText.replace("&nbsp;", " ")
-//        if (!nText.isEmpty() || nText == " ") nText += " "
+
+        if (endsWithLetter(textSoFar) && startsWithLetter(nText)){
+            nText = " " + nText
+        }
+
         return nText
     }
 
@@ -107,8 +118,8 @@ object TextManager {
         return spText
     }
 
-    fun decorateHyperlink(text: String, link: String): SpannableString {
-        val string = SpannableString(adjustText(text))
+    fun decorateHyperlink(text: String, link: String, textSoFar: String): SpannableString {
+        val string = SpannableString(adjustText(text, textSoFar))
         val clickSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))

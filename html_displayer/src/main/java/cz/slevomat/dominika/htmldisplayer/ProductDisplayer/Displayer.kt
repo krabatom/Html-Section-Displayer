@@ -33,10 +33,10 @@ object Displayer {
      */
     fun manageAttributes(attributes: org.jsoup.nodes.Attributes, tag: String,
                          spannableBuilder: SpannableStringBuilder,
-                         instance: DisplayHtml): SpannableString {
+                         instance: DisplayHtml, textSoFar: String): SpannableString {
             for (attribute in attributes) {
                 when (attribute.key) {
-                    TAG_TEXT -> return processTextItem(spannableBuilder, attribute.value, tag, instance)
+                    TAG_TEXT -> return processTextItem(spannableBuilder, textSoFar, attribute.value, tag, instance)
                     TAG_IMAGE -> return processImageItem(attribute.value, spannableBuilder, instance)
                     else -> return SpannableString(spannableBuilder)
                 }
@@ -70,19 +70,19 @@ object Displayer {
         }
     }
 
-    private fun processTextItem(spannableBuilder: SpannableStringBuilder, text: String,
+    private fun processTextItem(spannableBuilder: SpannableStringBuilder, textSoFar : String, text: String,
                                 tag: String, instance: DisplayHtml): SpannableString{
         //if text contains id of a youtube video, add video groupie item
         if (text.contains(PREFIX_YOUTUBE_ID)){
-            addTextItemWithVideo(SpannableString(TextManager.adjustText(text)),spannableBuilder, instance)
+            addTextItemWithVideo(SpannableString(TextManager.adjustText(text, textSoFar)),spannableBuilder, instance)
             return SpannableString("")
         }
         else {
-            return SpannableString(spannableBuilder.append(TextManager.decorateText(text, tag, instance.decoratorArray)))
+            return SpannableString(spannableBuilder.append(TextManager.decorateText(text, textSoFar, tag, instance.decoratorArray)))
         }
     }
 
-    fun processHyperlink(child: org.jsoup.nodes.Node): SpannableString {
+    fun processHyperlink(child: org.jsoup.nodes.Node, textSoFar: String): SpannableString {
         var text = ""
         var link = ""
         if (child.attr("href") != null) {
@@ -91,7 +91,7 @@ object Displayer {
         if (child.childNode(0) != null) {
             text = child.childNode(0).toString()
         }
-        return TextManager.decorateHyperlink(text, link)
+        return TextManager.decorateHyperlink(text, link, textSoFar)
     }
 
     fun addTextItem(text: SpannableString, instance: DisplayHtml){
@@ -213,7 +213,7 @@ object Displayer {
     private fun getTextFromRowItem(element: org.jsoup.nodes.Node, tag: String): SpannableString{
         val text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
-            return SpannableString(TextManager.decorateText(element.attr(TAG_TEXT), tag, ArrayList(0)))
+            return SpannableString(TextManager.decorateText(element.attr(TAG_TEXT), "", tag, ArrayList(0)))
         } else for (child in element.childNodes()){
             text.append(getTextFromRowItem(child, element.nodeName()))
         }
@@ -223,7 +223,7 @@ object Displayer {
     private fun getHeaderTextFromRowItem(element: org.jsoup.nodes.Node): SpannableString{
         val text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
-            return TextManager.decorateText(element.attr(TAG_TEXT), TAG_STRONG, ArrayList(0))
+            return TextManager.decorateText(element.attr(TAG_TEXT), "", TAG_STRONG, ArrayList(0))
         } else for (child in element.childNodes()){
             text.append(getHeaderTextFromRowItem(child))
         }

@@ -50,7 +50,7 @@ class DisplayHtml{
         try {
             val job = async(Dispatchers.Default) {
                 htmlRecursion(
-                        parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN,this@DisplayHtml)
+                        parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN,this@DisplayHtml, "")
             }
             job.await()
             listener.setDataset(dataItems)
@@ -63,7 +63,7 @@ class DisplayHtml{
     /**
      * Recursively go through parsed html and with processed nodes fill dataItems array based on node's tag
      */
-    private fun htmlRecursion(children: MutableList<org.jsoup.nodes.Node>, dataType: DataType, instance : DisplayHtml): SpannableString {
+    private fun htmlRecursion(children: MutableList<org.jsoup.nodes.Node>, dataType: DataType, instance : DisplayHtml, textSoFar : String): SpannableString {
             if (children.size > 0) {
                 var spannableBuilder = SpannableStringBuilder("")
                 var olCounter = 0  //specifies numerical mark before ordered list item
@@ -89,7 +89,7 @@ class DisplayHtml{
                                     else spannableBuilder = Displayer.processNodeAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
 
                                 }
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_UNORDERED, instance))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_UNORDERED, instance, spannableBuilder.toString()))
                             }
                             TAG_LIST_ORDER -> {
                                 if (!spannableBuilder.toString().isBlank() && dataType != DataType.LIST_ORDERED && dataType != DataType.LIST_UNORDERED){
@@ -98,23 +98,23 @@ class DisplayHtml{
                                     Displayer.addTextItem(SpannableString(spannableBuilder), instance)
                                     spannableBuilder = SpannableStringBuilder("")
                                 }
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_ORDERED, instance))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.LIST_ORDERED, instance, spannableBuilder.toString()))
                             }
 
-                            TAG_LIST -> spannableBuilder.append(htmlRecursion(child.childNodes(),dataType, instance))
+                            TAG_LIST -> spannableBuilder.append(htmlRecursion(child.childNodes(),dataType, instance, spannableBuilder.toString()))
                             TAG_TABLE -> spannableBuilder.append(Displayer.processTableItem(spannableBuilder, child.childNodes(), instance))
                             TAG_ITALIC, TAG_EMPH, TAG_STRONG, TAG_BOLD -> {
                                 //text might have more tags (eg. strong and i) so to decorate text
                                 //with all its tags later add tags to array
                                 decoratorArray.add(child.nodeName())
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder.toString()))
                                 decoratorArray.removeAt(decoratorArray.size - 1)
                             }
                             TAG_HYPERLINK -> {
-                                spannableBuilder.append(Displayer.processHyperlink(child))
+                                spannableBuilder.append(Displayer.processHyperlink(child, textSoFar + spannableBuilder.toString()))
                             }
                             else -> {
-                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance))
+                                spannableBuilder.append(htmlRecursion(child.childNodes(),DataType.UNKNOWN, instance, spannableBuilder.toString()))
                             }
                         }
                         when(child.nodeName()){
@@ -135,7 +135,7 @@ class DisplayHtml{
                     } else {
                         //
                         spannableBuilder = SpannableStringBuilder(
-                                Displayer.manageAttributes(child.attributes(), child.parentNode().nodeName(),spannableBuilder,instance))
+                                Displayer.manageAttributes(child.attributes(), child.parentNode().nodeName(),spannableBuilder,instance, textSoFar + spannableBuilder.toString()))
                     }
                 }
                 return SpannableString(spannableBuilder)
