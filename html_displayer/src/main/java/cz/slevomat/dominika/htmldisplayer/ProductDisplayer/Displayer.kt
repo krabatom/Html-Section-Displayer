@@ -74,7 +74,7 @@ object Displayer {
                                 tag: String, instance: DisplayHtml): SpannableString{
         //if text contains id of a youtube video, add video groupie item
         if (text.contains(PREFIX_YOUTUBE_ID)){
-            addTextItemWithVideo(SpannableString(TextManager.adjustText(text, textSoFar)),spannableBuilder, instance)
+            addTextItemWithVideo(SpannableString(TextManager.adjustText(text, textSoFar)),spannableBuilder, textSoFar, tag, instance)
             return SpannableString("")
         }
         else {
@@ -128,12 +128,12 @@ object Displayer {
         ))
     }
 
-    private fun addTextItemWithVideo(text: SpannableString, spannableBuilder: SpannableStringBuilder,
-                                     instance: DisplayHtml){
+    private fun addTextItemWithVideo(spannableText: SpannableString, spannableBuilder: SpannableStringBuilder,
+                                     textSoFar : String, tag: String, instance: DisplayHtml){
         //check whether before and after "[youtube id=..." is text and add it in correct order
-        var youtubeID = text.substring(text.indexOf(PREFIX_YOUTUBE_ID), text.indexOf("\"]")+2)
-        val substrBeforeVideo = text.subSequence(0, text.indexOf(PREFIX_YOUTUBE_ID))
-        val substrAfterVideo = text.subSequence(text.indexOf("\"]")+2, text.length)
+        var youtubeID = spannableText.substring(spannableText.indexOf(PREFIX_YOUTUBE_ID), spannableText.indexOf("\"]")+2)
+        val substrBeforeVideo = spannableText.subSequence(0, spannableText.indexOf(PREFIX_YOUTUBE_ID))
+        val substrAfterVideo = spannableText.subSequence(spannableText.indexOf("\"]")+2, spannableText.length)
         youtubeID = youtubeID.removePrefix(PREFIX_YOUTUBE_ID + "\"")
         youtubeID = youtubeID.removeSuffix("\"]")
         if (spannableBuilder.toString().isNotBlank()) {
@@ -141,7 +141,7 @@ object Displayer {
         }
         else addTextItem(SpannableString(substrBeforeVideo),instance)
         addVideoItem(youtubeID, instance)
-        addTextItem(SpannableString(substrAfterVideo),instance)
+        processTextItem(spannableBuilder, textSoFar, substrAfterVideo.toString(), tag, instance)
     }
 
     private fun addVideoItem(videoId: String, instance: DisplayHtml) {
