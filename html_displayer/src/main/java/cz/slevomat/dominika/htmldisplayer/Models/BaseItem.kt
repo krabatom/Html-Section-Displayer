@@ -10,5 +10,5 @@ import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.DataType
  * @param url url of image or id of video
  * @param liLevel defines padding from left based on the level of the list item
  */
-class BaseItem(val dataType: DataType, val textToDisplay: SpannableString,
-               val url: String, val liLevel: Int, val table: TableModel)
+class BaseItem(val dataType: DataType, val textToDisplay: SpannableString? = null,
+               val url: String? = null, val liLevel: Int = 1, val table: TableModel? = null)

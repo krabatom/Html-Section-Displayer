@@ -60,7 +60,8 @@ object TextManager {
     }
 
     private fun endsWithLetter(string : String) : Boolean{
-        return string.matches(Regex(".*[[[:alpha:]]0-9%\\.,:]"))
+        return string.matches(Regex(".*[^[[:space:]]]"))
+//        return string.matches(Regex(".*[[[:alpha:]]0-9%\\.,:]"))
     }
 
     /**
@@ -82,7 +83,7 @@ object TextManager {
         nText = nText.replace("&nbsp;", " ")
 
         if (endsWithLetter(textSoFar) && startsWithLetter(nText)){
-            nText = " " + nText
+            nText = " $nText"
         }
 
         return nText

@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.image_item.*
 /**
  * Groupie item for an image
  */
-class RecyclerViewImage (private val imgURL: String) : Item() {
+class ImageItem (private val imgURL: String?) : Item() {
 
     override fun getLayout() = R.layout.image_item
 

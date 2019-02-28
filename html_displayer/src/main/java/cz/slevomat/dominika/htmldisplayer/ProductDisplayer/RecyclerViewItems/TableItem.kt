@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.table_item.*
 /**
  * Groupie item for a table item
  */
-class RecyclerViewTable (private val table: MutableList<MutableList<SpannableString>>): Item(){
+class TableItem (private val table: MutableList<MutableList<SpannableString>>): Item(){
     //table is displayed inside horizontal scroll view layout
     override fun getLayout() = R.layout.table_item
 

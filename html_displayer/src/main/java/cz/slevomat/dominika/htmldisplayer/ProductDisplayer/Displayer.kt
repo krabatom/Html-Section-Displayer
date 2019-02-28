@@ -95,11 +95,8 @@ object Displayer {
 
     fun addTextItem(text: SpannableString, instance: DisplayHtml){
         if (text.toString().isNotBlank()) instance.dataItems.add(BaseItem(
-                DataType.TEXT,
-                text,
-                "",
-                1,
-                TableModel(null)
+                dataType = DataType.TEXT,
+                textToDisplay = text
         ))
     }
 
@@ -119,11 +116,8 @@ object Displayer {
 
     private fun addImageItem(url: String, instance: DisplayHtml){
         instance.dataItems.add(BaseItem(
-                DataType.IMAGE,
-                SpannableString(""),
-                url,
-                1,
-                TableModel(null)
+                dataType = DataType.IMAGE,
+                url = url
         ))
     }
 
@@ -145,22 +139,17 @@ object Displayer {
 
     private fun addVideoItem(videoId: String, instance: DisplayHtml) {
         instance.dataItems.add(BaseItem(
-                DataType.YOUTUBE,
-                SpannableString(""),
-                videoId,
-                1,
-                TableModel(null)
+                dataType = DataType.YOUTUBE,
+                url = videoId
         ))
     }
 
 
     private fun addListItem(text: SpannableString, ulLevel: Int, instance: DisplayHtml){
             if (text.toString().isNotBlank()) instance.dataItems.add(BaseItem(
-                    DataType.LIST_ORDERED,
-                    text,
-                    "",
-                    ulLevel,
-                    TableModel(null)
+                    dataType = DataType.LIST_ORDERED,
+                    textToDisplay = text,
+                    liLevel = ulLevel
             ))
         }
 
@@ -231,11 +220,8 @@ object Displayer {
 
     private fun addTableItem(table: TableModel, instance: DisplayHtml){
         instance.dataItems.add(BaseItem(
-                DataType.TABLE,
-                SpannableString(""),
-                "",
-                1,
-                table
+                dataType = DataType.TABLE,
+                table = table
         ))
     }
 

@@ -2,6 +2,8 @@ package cz.slevomat.dominika.htmldisplayer;
 
 import org.junit.Test;
 
+import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.TextManager;
+
 import static org.junit.Assert.*;
 
 /**
@@ -13,5 +15,11 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void testTab() {
+        String result = TextManager.INSTANCE.adjustText("\n\n\n\n\t\t\t\n\t\t\t\t\t", "hkh\t");
+        assertEquals("", result);
     }
 }

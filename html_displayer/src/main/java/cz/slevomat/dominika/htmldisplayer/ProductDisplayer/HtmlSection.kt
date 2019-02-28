@@ -46,12 +46,12 @@ open class HtmlSection(headerItem: Group? = null) : Section(headerItem), Display
      */
     private fun createGroupieItem(item: BaseItem): Section {
         return when (item.dataType) {
-            DataType.TEXT -> Section(RecyclerViewText(item.textToDisplay))
-            DataType.IMAGE -> Section(RecyclerViewImage(item.url))
-            DataType.LIST_ORDERED -> Section(RecyclerViewList(item.textToDisplay, item.liLevel))
-            DataType.LIST_UNORDERED -> Section(RecyclerViewList(item.textToDisplay, item.liLevel))
-            DataType.YOUTUBE -> Section(RecyclerViewVideo(item.url))
-            DataType.TABLE -> Section(RecyclerViewTable(item.table.rows!!))
+            DataType.TEXT -> Section(TextItem(item.textToDisplay))
+            DataType.IMAGE -> Section(ImageItem(item.url))
+            DataType.LIST_ORDERED -> Section(ListItem(item.textToDisplay, item.liLevel))
+            DataType.LIST_UNORDERED -> Section(ListItem(item.textToDisplay, item.liLevel))
+            DataType.YOUTUBE -> Section(VideoItem(item.url))
+            DataType.TABLE -> Section(TableItem(item.table?.rows!!))
             DataType.UNKNOWN -> throw UnknownFormatConversionException("Unknown HTML type")
         }
     }
