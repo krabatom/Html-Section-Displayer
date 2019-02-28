@@ -60,7 +60,7 @@ object TextManager {
     }
 
     private fun endsWithLetter(string : String) : Boolean{
-        return string.matches(Regex(".*[[[:alpha:]]0-9%]"))
+        return string.matches(Regex(".*[[[:alpha:]]0-9%\\.,:]"))
     }
 
     /**

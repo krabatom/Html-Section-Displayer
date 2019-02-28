@@ -5,7 +5,6 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
-import android.util.Log
 import cz.slevomat.dominika.htmldisplayer.Models.BaseItem
 import cz.slevomat.dominika.htmldisplayer.Models.TableModel
 import org.jsoup.nodes.Node

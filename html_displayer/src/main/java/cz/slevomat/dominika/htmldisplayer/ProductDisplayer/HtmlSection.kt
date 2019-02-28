@@ -15,6 +15,9 @@ open class HtmlSection(headerItem: Group? = null) : Section(headerItem), Display
      * Async parse and show html content in android views
      */
     fun loadAsync(htmlContent: String?) {
+        if (htmlContent == null){
+            return
+        }
         //do not reload same content
         if (this.htmlContent == htmlContent) {
             return

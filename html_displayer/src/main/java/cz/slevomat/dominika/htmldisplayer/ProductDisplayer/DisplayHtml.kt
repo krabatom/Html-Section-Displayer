@@ -25,26 +25,26 @@ class DisplayHtml{
     private val TAG_HYPERLINK: String = "a"
     val decoratorArray: ArrayList<String> = arrayListOf()
 
-    private fun isHTML(sHtml: String?): Boolean{
+    private fun isHTML(sHtml: String): Boolean{
         val regex = """<[a-z][\s\S]*>""".toRegex()
-        return regex.containsMatchIn(sHtml!!)
+        return regex.containsMatchIn(sHtml)
     }
 
     /**
      * Parse html using Jsoup
      */
-    private fun parseHtml(sHtml: String?): org.jsoup.nodes.Document {
+    private fun parseHtml(sHtml: String): org.jsoup.nodes.Document {
         val parsedString = Jsoup.parse(sHtml)
         //check if it is html
-        if (!isHTML(sHtml)){
+        return if (!isHTML(sHtml)){
             //sHtml is only text without html tags
             //add Html tags so it can be processed as a html string
-            return Jsoup.parse("<p>" + sHtml + "</p>")
+            Jsoup.parse("<p>$sHtml</p>")
         }
-        else return parsedString
+        else parsedString
     }
 
-    fun createSectionsFromHtml(sHtml: String?, listener: SetDataListener)
+    fun createSectionsFromHtml(sHtml: String, listener: SetDataListener)
             = GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT) {
         dataItems.clear()
         try {
