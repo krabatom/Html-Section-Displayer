@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.list_item.*
  * Groupie item for a list item
  * @param liLevel defines level (padding) of the list item
  */
-class ListItem (private val text: SpannableString?, private val liLevel: Int) : Item() {
+internal class ListItem (private val text: SpannableString?, private val liLevel: Int) : Item() {
 
     override fun getLayout() = R.layout.list_item
 

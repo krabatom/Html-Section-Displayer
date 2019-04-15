@@ -1,15 +1,17 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
-import android.graphics.Typeface
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.StyleSpan
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
-import android.text.*
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.view.View
 
-object TextManager {
+internal object TextManager {
     private val chars = arrayOf(" ", "", "\n", "\t", "\n\t")
     private const val TAG_STRONG: String = "strong"
     private const val TAG_BOLD: String = "b"

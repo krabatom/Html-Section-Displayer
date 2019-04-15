@@ -13,7 +13,7 @@ import org.jsoup.nodes.Node
  * Object Displayer decides how the data in spannable builder should be added as groupie items
  * to dataItems array and in which order based on attributes and tags of html nodes
 **/
-object Displayer {
+internal object Displayer {
     private val TAG: String = Displayer::class.java.simpleName
 
     private const val TAG_TEXT: String  = "#text"

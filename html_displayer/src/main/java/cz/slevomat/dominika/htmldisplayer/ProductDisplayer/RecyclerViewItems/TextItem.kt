@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.text_item.*
 /**
  * Groupie item for a text item
  */
-class TextItem (private val text: SpannableString?) : Item() {
+internal class TextItem (private val text: SpannableString?) : Item() {
 
     override fun getLayout() = R.layout.text_item
 
