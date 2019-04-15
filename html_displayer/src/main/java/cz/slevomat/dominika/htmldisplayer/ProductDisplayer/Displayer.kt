@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
+import android.util.Log
 import cz.slevomat.dominika.htmldisplayer.Models.BaseItem
 import cz.slevomat.dominika.htmldisplayer.Models.TableModel
 import org.jsoup.nodes.Node
@@ -34,10 +35,10 @@ internal object Displayer {
                          spannableBuilder: SpannableStringBuilder,
                          instance: DisplayHtml, textSoFar: String): SpannableString {
             for (attribute in attributes) {
-                when (attribute.key) {
-                    TAG_TEXT -> return processTextItem(spannableBuilder, textSoFar, attribute.value, tag, instance)
-                    TAG_IMAGE -> return processImageItem(attribute.value, spannableBuilder, instance)
-                    else -> return SpannableString(spannableBuilder)
+                return when (attribute.key) {
+                    TAG_TEXT -> processTextItem(spannableBuilder, textSoFar, attribute.value, tag, instance)
+                    TAG_IMAGE -> processImageItem(attribute.value, spannableBuilder, instance)
+                    else -> SpannableString(spannableBuilder)
                 }
             }
             return SpannableString(spannableBuilder)
@@ -59,11 +60,10 @@ internal object Displayer {
                 return SpannableStringBuilder("")
             }
             TAG_UL -> {
-                if (listType == DataType.LIST_ORDERED || listType == DataType.LIST_UNORDERED){
+                return if (listType == DataType.LIST_ORDERED || listType == DataType.LIST_UNORDERED){
                     processListItem(SpannableString(spannableBuilder), ulLevel, olLevel, listType, instance)
-                    return SpannableStringBuilder("")
-                }
-                else return spannableBuilder
+                    SpannableStringBuilder("")
+                } else spannableBuilder
             }
             else -> return spannableBuilder
         }
@@ -72,12 +72,11 @@ internal object Displayer {
     private fun processTextItem(spannableBuilder: SpannableStringBuilder, textSoFar : String, text: String,
                                 tag: String, instance: DisplayHtml): SpannableString{
         //if text contains id of a youtube video, add video groupie item
-        if (text.contains(PREFIX_YOUTUBE_ID)){
+        return if (text.contains(PREFIX_YOUTUBE_ID)){
             addTextItemWithVideo(SpannableString(TextManager.adjustText(text, textSoFar)),spannableBuilder, textSoFar, tag, instance)
-            return SpannableString("")
-        }
-        else {
-            return SpannableString(spannableBuilder.append(TextManager.decorateText(text, textSoFar, tag, instance.decoratorArray)))
+            SpannableString("")
+        } else {
+            SpannableString(spannableBuilder.append(TextManager.decorateText(text, textSoFar, tag, instance.decoratorArray)))
         }
     }
 
@@ -156,7 +155,7 @@ internal object Displayer {
     private fun addOrderedListItem(bulletBuilder: SpannableString, ulLevel: Int, olLevel: Int,
                                    instance: DisplayHtml){
         if (bulletBuilder.toString().isNotBlank()){
-            val newSpanString = SpannableStringBuilder(olLevel.toString() + ".  ")
+            val newSpanString = SpannableStringBuilder("$olLevel.  ")
             newSpanString.append(bulletBuilder)
             addListItem(SpannableString(newSpanString), ulLevel, instance)
         }
@@ -175,6 +174,7 @@ internal object Displayer {
         when(listType){
             DataType.LIST_ORDERED -> addOrderedListItem(bulletBuilder, ulLevel, olLevel, instance)
             DataType.LIST_UNORDERED -> addUnorderedListItem(bulletBuilder, ulLevel, instance)
+            else -> Log.e(TAG, "bad data type for list $listType")
         }
     }
 
