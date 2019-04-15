@@ -1,15 +1,17 @@
 package cz.slevomat.dominika.htmldisplayer.ProductDisplayer
 
-import android.graphics.Typeface
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.StyleSpan
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
-import android.text.*
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.view.View
 
-object TextManager {
+internal object TextManager {
     private val chars = arrayOf(" ", "", "\n", "\t", "\n\t")
     private const val TAG_STRONG: String = "strong"
     private const val TAG_BOLD: String = "b"
@@ -26,9 +28,9 @@ object TextManager {
             if (tags.size > 1) {
                 var spannableString = SpannableString(adjText)
                 for (tag in tags) {
-                    when (tag) {
-                        TAG_STRONG, TAG_BOLD -> spannableString = decorateBold(spannableString)
-                        TAG_EMPH, TAG_ITALIC -> spannableString = decorateItalic(spannableString)
+                    spannableString = when (tag) {
+                        TAG_STRONG, TAG_BOLD -> decorateBold(spannableString)
+                        TAG_EMPH, TAG_ITALIC -> decorateItalic(spannableString)
                         "h1" -> return decorateHi(1, adjText)
                         "h2" -> return decorateHi(2, adjText)
                         "h3" -> return decorateHi(3, adjText)

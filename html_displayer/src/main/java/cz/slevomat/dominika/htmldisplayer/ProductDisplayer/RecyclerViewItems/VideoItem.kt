@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.video_item.*
 /**
  * Groupie item for a video item
  */
-class VideoItem (private val videoId: String?): Item() {
+internal class VideoItem (private val videoId: String?): Item() {
     private val TAG: String = VideoItem::class.java.simpleName
     private val URL_VIDEO_PREFIX = "https://www.youtube.com/watch?v="
     private val URL_VIDEO_THUMBNAIL = "http://img.youtube.com/vi/%s/0.jpg"

@@ -1,14 +1,15 @@
 package cz.slevomat.dominika.productHtmlParser.Activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.util.Log
-import cz.slevomat.dominika.productHtmlParser.R
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.HtmlSection
 import cz.slevomat.dominika.productHtmlParser.HtmlExamples
+import cz.slevomat.dominika.productHtmlParser.R
 import cz.slevomat.dominika.productHtmlParser.Retrofit.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,19 +40,30 @@ class MainActivity : AppCompatActivity() {
      * @param gAdapter Adapter for displaying groupie sections
      */
     private fun displayFromId(productId: Long, gAdapter: GroupAdapter<ViewHolder>) {
+      // loadViaApi(productId, gAdapter)
+       loadViaExample(gAdapter)
+    }
+
+    private fun loadViaExample(gAdapter: GroupAdapter<ViewHolder>) {
+        val htmlSection = HtmlSection()
+        htmlSection.loadAsync(HtmlExamples.exHtml)
+        gAdapter.add(htmlSection)
+    }
+
+    @SuppressLint("CheckResult")
+    private fun loadViaApi(productId: Long, gAdapter: GroupAdapter<ViewHolder>) {
         val client = RetrofitClient.create()
         client.getProductDescription(productId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { result ->
-                            val htmlSection = HtmlSection()
-                            htmlSection.loadAsync(result.data?.product?.description
-                                    ?: "")
-//                            htmlSection.loadAsync(HtmlExamples.exHtml)
-                            gAdapter.add(htmlSection)
-                        },
-                        { error -> Log.e(TAG, error.message) }
-                )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->
+                    val htmlSection = HtmlSection()
+                     htmlSection.loadAsync(result.data?.product?.description
+                           ?: "")
+                    gAdapter.add(htmlSection)
+                },
+                { error -> Log.e(TAG, error.message) }
+            )
     }
 }
