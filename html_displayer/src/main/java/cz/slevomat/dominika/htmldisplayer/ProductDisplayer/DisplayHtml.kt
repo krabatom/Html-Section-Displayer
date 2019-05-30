@@ -50,11 +50,18 @@ class DisplayHtml {
             dataItems.clear()
             try {
                 val job = async(Dispatchers.Default) {
+                    // Parse result to dataItems
                     htmlRecursion(
                         parseHtml(sHtml).body().childNodes(), DataType.UNKNOWN, this@DisplayHtml, ""
                     )
                 }
-                job.await()
+                val simpleResult = job.await()
+                if (simpleResult.isNotEmpty()) {
+                    // Apart from parsed data items, parsing can return just simple styled string
+                    // from root node. Add it to items as a text item
+                    dataItems.add(0, BaseItem(DataType.TEXT, textToDisplay = simpleResult))
+                }
+
                 setDataset(dataItems, listener)
             } catch (e: Exception) {
                 Log.e(TAG, "parsing failed", e)
