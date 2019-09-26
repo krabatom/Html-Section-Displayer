@@ -2,8 +2,8 @@ package cz.slevomat.dominika.htmldisplayer.ProductDisplayer.RecyclerViewItems
 
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import cz.slevomat.dominika.htmldisplayer.R
 import kotlinx.android.synthetic.main.list_item.*
 
@@ -15,7 +15,7 @@ internal class ListItem (private val text: SpannableString?, private val liLevel
 
     override fun getLayout() = R.layout.list_item
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val view = viewHolder.text_view_list
         view.setPadding(liLevel * 50, 0,0,0)
         viewHolder.text_view_list.movementMethod = LinkMovementMethod.getInstance()
