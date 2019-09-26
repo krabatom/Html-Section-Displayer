@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.bumptech.glide.Glide
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import cz.slevomat.dominika.htmldisplayer.R
 import kotlinx.android.synthetic.main.video_item.*
 
@@ -19,7 +19,7 @@ internal class VideoItem (private val videoId: String?): Item() {
 
     override fun getLayout() = R.layout.video_item
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         displayVideoThumbnail(videoId, viewHolder)
         viewHolder.video_view_item.setOnClickListener {
             launchYoutubeId(viewHolder.video_view_item.context, videoId) }
@@ -33,7 +33,7 @@ internal class VideoItem (private val videoId: String?): Item() {
         context.startActivity(intent)
     }
 
-    private fun displayVideoThumbnail(videoId: String?, viewHolder: ViewHolder){
+    private fun displayVideoThumbnail(videoId: String?, viewHolder: GroupieViewHolder){
         val imgURL = String.format(URL_VIDEO_THUMBNAIL, videoId)
         Glide.with(viewHolder.video_view_item.context).load(imgURL).into(viewHolder.video_view_item)
     }

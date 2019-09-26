@@ -8,8 +8,8 @@ import android.widget.HorizontalScrollView
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import cz.slevomat.dominika.htmldisplayer.R
 import kotlinx.android.synthetic.main.table_item.*
 
@@ -20,7 +20,7 @@ internal class TableItem (private val table: MutableList<MutableList<SpannableSt
     //table is displayed inside horizontal scroll view layout
     override fun getLayout() = R.layout.table_item
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val context = viewHolder.horizontal_scroll_table.context
         //if scroll view is not empty then clear it's content
         if (viewHolder.horizontal_scroll_table.childCount != 0)
