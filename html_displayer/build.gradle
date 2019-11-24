@@ -11,11 +11,11 @@ androidExtensions {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -45,9 +45,9 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.xwray:groupie:2.6.0'
-    implementation 'com.xwray:groupie-kotlin-android-extensions:2.6.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.xwray:groupie:2.7.1'
+    implementation 'com.xwray:groupie-kotlin-android-extensions:2.7.1'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     implementation 'org.jsoup:jsoup:1.11.2'
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
