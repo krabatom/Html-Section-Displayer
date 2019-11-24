@@ -47,7 +47,7 @@ internal object Displayer {
     /**
      * Based on the node's tag create new groupie item and add it to dataItems
      */
-    fun processNodeAndAdd(node: org.jsoup.nodes.Node, spannableBuilder: SpannableStringBuilder,
+    fun processNodeAndAdd(node: Node, spannableBuilder: SpannableStringBuilder,
                           ulLevel: Int, olLevel: Int, listType: DataType,
                           instance: DisplayHtml): SpannableStringBuilder{
         when (node.nodeName()){
@@ -80,7 +80,7 @@ internal object Displayer {
         }
     }
 
-    fun processHyperlink(child: org.jsoup.nodes.Node, textSoFar: String): SpannableString {
+    fun processHyperlink(child: Node, textSoFar: String): SpannableString {
         var text = ""
         var link = ""
         if (child.attr("href") != null) {
@@ -182,7 +182,7 @@ internal object Displayer {
         }
     }
 
-    fun processTableItem(spannableBuilder: SpannableStringBuilder, children: MutableList<org.jsoup.nodes.Node>,
+    fun processTableItem(spannableBuilder: SpannableStringBuilder, children: MutableList<Node>,
                          instance: DisplayHtml): SpannableString{
         if (spannableBuilder.toString().isBlank()) {
             createTableAndAdd(children, instance)
@@ -191,7 +191,7 @@ internal object Displayer {
         return SpannableString("")
     }
 
-    private fun processRowItem(rowElement: MutableList<org.jsoup.nodes.Node>): MutableList<SpannableString>{
+    private fun processRowItem(rowElement: MutableList<Node>): MutableList<SpannableString>{
         val rowItems: MutableList<SpannableString> = arrayListOf()
         for (element in rowElement){
             when(element.nodeName()){
@@ -202,7 +202,7 @@ internal object Displayer {
         return rowItems
     }
 
-    private fun getTextFromRowItem(element: org.jsoup.nodes.Node, tag: String): SpannableString{
+    private fun getTextFromRowItem(element: Node, tag: String): SpannableString{
         val text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
             return SpannableString(TextManager.decorateText(element.attr(TAG_TEXT), "", tag, ArrayList(0)))
@@ -212,7 +212,7 @@ internal object Displayer {
         return SpannableString(text)
     }
 
-    private fun getHeaderTextFromRowItem(element: org.jsoup.nodes.Node): SpannableString{
+    private fun getHeaderTextFromRowItem(element: Node): SpannableString{
         val text = SpannableStringBuilder("")
         if (element.childNodeSize() == 0){
             return TextManager.decorateText(element.attr(TAG_TEXT), "", TAG_STRONG, ArrayList(0))
