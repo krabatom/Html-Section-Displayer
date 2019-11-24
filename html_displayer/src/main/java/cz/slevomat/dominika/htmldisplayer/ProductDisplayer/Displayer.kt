@@ -123,17 +123,21 @@ internal object Displayer {
     private fun addTextItemWithVideo(spannableText: SpannableString, spannableBuilder: SpannableStringBuilder,
                                      textSoFar : String, tag: String, instance: DisplayHtml){
         //check whether before and after "[youtube id=..." is text and add it in correct order
-        var youtubeID = spannableText.substring(spannableText.indexOf(PREFIX_YOUTUBE_ID), spannableText.indexOf("\"]")+2)
-        val substrBeforeVideo = spannableText.subSequence(0, spannableText.indexOf(PREFIX_YOUTUBE_ID))
-        val substrAfterVideo = spannableText.subSequence(spannableText.indexOf("\"]")+2, spannableText.length)
+        val startIndex = spannableText.indexOf(PREFIX_YOUTUBE_ID)
+        // Find end index AFTER start index (postfix can appear in text multiple times without special meaning)
+        val endIndex = spannableText.indexOf("\"]", startIndex = startIndex)+2
+
+        var youtubeID = spannableText.substring(startIndex, endIndex)
+        val textBeforeVideo = spannableText.subSequence(0, startIndex)
+        val textAfterVideo = spannableText.subSequence(endIndex, spannableText.length)
         youtubeID = youtubeID.removePrefix(PREFIX_YOUTUBE_ID + "\"")
         youtubeID = youtubeID.removeSuffix("\"]")
         if (spannableBuilder.toString().isNotBlank()) {
-            addTextItem(SpannableString(spannableBuilder.append(substrBeforeVideo)), instance)
+            addTextItem(SpannableString(spannableBuilder.append(textBeforeVideo)), instance)
         }
-        else addTextItem(SpannableString(substrBeforeVideo),instance)
+        else addTextItem(SpannableString(textBeforeVideo),instance)
         addVideoItem(youtubeID, instance)
-        processTextItem(spannableBuilder, textSoFar, substrAfterVideo.toString(), tag, instance)
+        processTextItem(spannableBuilder, textSoFar, textAfterVideo.toString(), tag, instance)
     }
 
     private fun addVideoItem(videoId: String, instance: DisplayHtml) {
