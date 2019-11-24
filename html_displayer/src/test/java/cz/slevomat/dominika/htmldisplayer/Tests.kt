@@ -2,11 +2,13 @@ package cz.slevomat.dominika.htmldisplayer
 
 import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.DataType
 import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.DisplayHtml
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@Config(sdk = [28])
 @RunWith(RobolectricTestRunner::class)
 class Tests {
 
