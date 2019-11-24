@@ -35,7 +35,7 @@ class DisplayHtml {
     /**
      * Parse html using Jsoup
      */
-    private fun parseHtml(sHtml: String): org.jsoup.nodes.Document {
+     fun parseHtml(sHtml: String): org.jsoup.nodes.Document {
         val parsedString = Jsoup.parse(sHtml)
         //check if it is html
         return if (!isHTML(sHtml)) {
@@ -72,7 +72,7 @@ class DisplayHtml {
     /**
      * Recursively go through parsed html and with processed nodes fill dataItems array based on node's tag
      */
-    private fun htmlRecursion(
+     fun htmlRecursion(
         children: MutableList<org.jsoup.nodes.Node>,
         dataType: DataType,
         instance: DisplayHtml,
