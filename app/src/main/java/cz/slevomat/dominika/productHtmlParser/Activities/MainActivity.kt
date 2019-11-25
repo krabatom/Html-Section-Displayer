@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
+import com.xwray.groupie.GroupieViewHolder
 import cz.slevomat.dominika.htmldisplayer.ProductDisplayer.HtmlSection
 import cz.slevomat.dominika.productHtmlParser.HtmlExamples
 import cz.slevomat.dominika.productHtmlParser.R
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val gAdapter = GroupAdapter<ViewHolder>()
+        val gAdapter = GroupAdapter<GroupieViewHolder>()
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = gAdapter
@@ -39,19 +39,19 @@ class MainActivity : AppCompatActivity() {
      * @param productId Id of the product to be displayed
      * @param gAdapter Adapter for displaying groupie sections
      */
-    private fun displayFromId(productId: Long, gAdapter: GroupAdapter<ViewHolder>) {
+    private fun displayFromId(productId: Long, gAdapter: GroupAdapter<GroupieViewHolder>) {
       // loadViaApi(productId, gAdapter)
        loadViaExample(gAdapter)
     }
 
-    private fun loadViaExample(gAdapter: GroupAdapter<ViewHolder>) {
+    private fun loadViaExample(gAdapter: GroupAdapter<GroupieViewHolder>) {
         val htmlSection = HtmlSection()
-        htmlSection.loadAsync(HtmlExamples.exHtml)
+        htmlSection.loadAsync(HtmlExamples.exHtml9)
         gAdapter.add(htmlSection)
     }
 
     @SuppressLint("CheckResult")
-    private fun loadViaApi(productId: Long, gAdapter: GroupAdapter<ViewHolder>) {
+    private fun loadViaApi(productId: Long, gAdapter: GroupAdapter<GroupieViewHolder>) {
         val client = RetrofitClient.create()
         client.getProductDescription(productId)
             .subscribeOn(Schedulers.io())
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                            ?: "")
                     gAdapter.add(htmlSection)
                 },
-                { error -> Log.e(TAG, error.message) }
+                { error -> Log.e(TAG, error.message ?: "") }
             )
     }
 }

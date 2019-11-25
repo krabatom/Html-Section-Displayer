@@ -11,31 +11,36 @@ import org.jsoup.Jsoup
 import java.util.*
 
 class DisplayHtml {
-    private val TAG: String = DisplayHtml::class.java.simpleName
+
+    companion object {
+        private val TAG: String = DisplayHtml::class.java.simpleName
+
+        private const val TAG_TABLE: String = "table"
+        private const val TAG_LIST: String = "li"
+        private const val TAG_LIST_UNORDER: String = "ul"
+        private const val TAG_LIST_ORDER: String = "ol"
+        private const val TAG_BREAK: String = "br"
+        private const val TAG_STRONG: String = "strong"
+        private const val TAG_BOLD: String = "b"
+        private const val TAG_EMPH: String = "em"
+        private const val TAG_ITALIC: String = "i"
+        private const val TAG_HYPERLINK: String = "a"
+
+        private fun isHTML(sHtml: String): Boolean {
+            val regex = """<[a-z][\s\S]*>""".toRegex()
+            return regex.containsMatchIn(sHtml)
+        }
+    }
+
+    val decoratorArray: ArrayList<String> = arrayListOf()
 
     internal val dataItems: ArrayList<BaseItem> = arrayListOf()
     private var liLevel = 0 //controlling <li> level for setting proper padding when being displayed
-    private val TAG_TABLE: String = "table"
-    private val TAG_LIST: String = "li"
-    private val TAG_LIST_UNORDER: String = "ul"
-    private val TAG_LIST_ORDER: String = "ol"
-    private val TAG_BREAK: String = "br"
-    private val TAG_STRONG: String = "strong"
-    private val TAG_BOLD: String = "b"
-    private val TAG_EMPH: String = "em"
-    private val TAG_ITALIC: String = "i"
-    private val TAG_HYPERLINK: String = "a"
-    val decoratorArray: ArrayList<String> = arrayListOf()
-
-    private fun isHTML(sHtml: String): Boolean {
-        val regex = """<[a-z][\s\S]*>""".toRegex()
-        return regex.containsMatchIn(sHtml)
-    }
 
     /**
      * Parse html using Jsoup
      */
-    private fun parseHtml(sHtml: String): org.jsoup.nodes.Document {
+     fun parseHtml(sHtml: String): org.jsoup.nodes.Document {
         val parsedString = Jsoup.parse(sHtml)
         //check if it is html
         return if (!isHTML(sHtml)) {
@@ -72,7 +77,7 @@ class DisplayHtml {
     /**
      * Recursively go through parsed html and with processed nodes fill dataItems array based on node's tag
      */
-    private fun htmlRecursion(
+     fun htmlRecursion(
         children: MutableList<org.jsoup.nodes.Node>,
         dataType: DataType,
         instance: DisplayHtml,
@@ -97,8 +102,8 @@ class DisplayHtml {
                             }
 
                             if (dataType == DataType.LIST_UNORDERED || dataType == DataType.LIST_ORDERED) {
-                                if (liLevel >= 1) {
-                                    spannableBuilder = Displayer.processNodeAndAdd(
+                                spannableBuilder = if (liLevel >= 1) {
+                                    Displayer.processNodeAndAdd(
                                         child,
                                         spannableBuilder,
                                         liLevel - 1,
@@ -106,8 +111,7 @@ class DisplayHtml {
                                         dataType,
                                         instance
                                     )
-                                } else spannableBuilder =
-                                    Displayer.processNodeAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
+                                } else Displayer.processNodeAndAdd(child, spannableBuilder, liLevel, olCounter, dataType, instance)
 
                             }
                             spannableBuilder.append(
@@ -229,7 +233,6 @@ class DisplayHtml {
             DataType.UNKNOWN -> throw UnknownFormatConversionException("Unknown HTML type")
         }
     }
-
 
     internal interface SetDataListener {
         fun setDataset(dataset: List<Section>)
